@@ -1,0 +1,44 @@
+[2025-04-19 19:18:51,975][loader.processor][INFO] - Processing 1 images...
+[2025-04-19 19:18:52,487][__main__][INFO] - Starting training pipeline...
+[2025-04-19 19:18:52,488][__main__][INFO] - 
+Configuration:
+[2025-04-19 19:18:52,489][__main__][INFO] - data_dir: D:\Data\beton
+dataset: beton_patches
+n_classes: 4
+is_not_ready: true
+standardization: true
+std_mean_path: D:\Data\beton\beton_std_mean
+ckpt: C:/tomograph4/Scripts/analytics_2/checkpoints/dinov2_vit_base_14.pth
+num_codebook: 2048
+reduced_dim: 90
+projection_dim: 2048
+run_name: train_dinov2
+dim: 768
+num_queries: 529
+device: cuda
+distributed: false
+load_segment: false
+load_cluster: false
+mediator_epoch: 1
+front_epoch: 2
+fine_tune_epoch: 5
+batch_size: 16
+learning_rate: 0.001
+num_workers: 2
+thresh_pos: 0.3
+thresh_neg: 0.1
+temp: 0.1
+grid: true
+degree_of_sampling: 2
+patch_size: 320
+train_resolution: 322
+patches_shape:
+- 7
+- 7
+overlap_fraction: 0.2
+max_images: 50
+gpu: '0'
+port: '12355'
+
+[2025-04-19 19:18:52,491][__main__][INFO] - -------------Inference-------------
+[2025-04-19 19:19:31,087][__main__][ERROR] - Error in Inference: integer division or modulo by zero
