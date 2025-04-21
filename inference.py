@@ -85,7 +85,6 @@ def test(args, net, segment, cluster, train_loader, cmap, nice, writer, rank):
             
             save_reconstructed_images(args, reconstructed, count, writer, rank)
             count += 1
-            break
         
     shutil.rmtree(temp_root)
 

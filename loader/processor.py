@@ -7,6 +7,7 @@ from pathlib import Path
 from tqdm.auto import tqdm
 from patchify import patchify
 from typing import Tuple, List
+from torchvision import transforms
 
 # Configure logging
 logging.basicConfig(
@@ -179,9 +180,17 @@ class ImageDataProcessor:
             images: List of image arrays
         """
         try:
-            images_array = np.stack(images, axis=0)
-            std = torch.tensor(np.std(images_array, axis=(0, 1, 2)))
-            mean = torch.tensor(np.mean(images_array, axis=(0, 1, 2)))
+            std = 0
+            mean = 0
+            logger.info(f"Std_mean estimation for {len(images)} images...")
+            for i in tqdm(range(len(images))):
+                transform = transforms.Compose([transforms.ToTensor()])
+                img_tr = transform(images[i])
+                m, s = img_tr.mean([1,2]), img_tr.std([1,2])
+                mean += m
+                std += s
+            std /= len(images)
+            mean /= len(images)
             
             torch.save(std, self.stats_dir / "std.pt")
             torch.save(mean, self.stats_dir / "mean.pt")

@@ -240,7 +240,7 @@ def save_reconstructed_images(args,
 
 def parse_filename(filepath):
     filename = os.path.basename(filepath)
-    stem = os.path.splitext(filename)
+    stem, _ = os.path.splitext(filename)
     
     prefix, num_str = stem.split('_', maxsplit=1)
     

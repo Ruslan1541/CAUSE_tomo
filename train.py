@@ -59,19 +59,17 @@ class TrainingPipeline:
             rank: GPU rank for distributed training
         """
         # Mediator training
-        # self.run_training_stage("Train Mediator", mediator_train, rank)
+        self.run_training_stage("Train Mediator", mediator_train, rank)
         
         # Front door training
-        # self.run_training_stage("Train Front", front_train, rank)
-        
-        self.cfg.load_segment = True
+        self.run_training_stage("Train Front", front_train, rank)
         
         # Fine tuning
-        # self.run_training_stage("Fine Tune", fine_tune, rank)
-        
-        self.cfg.load_cluster = True
+        self.cfg.load_segment = True
+        self.run_training_stage("Fine Tune", fine_tune, rank)
         
         # Inference
+        self.cfg.load_cluster = True
         self.run_training_stage("Inference", inference, rank)
 
     def process_dataset(self) -> None:
