@@ -33,7 +33,7 @@ grid: true
 degree_of_sampling: 2
 
 #processing:
-patch_size: 320 #train resolution as well
+patch_size: 320
 train_resolution: 320
 patches_shape: null
 overlap_fraction: 0.2

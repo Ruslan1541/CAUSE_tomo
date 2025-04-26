@@ -1,88 +1,102 @@
-# SSG
+# CAUSE\_tomo — Causal Unsupervised Segmentation for tomographic images
 
-## Results
+This code is the further development of [**Causal‑Unsupervised‑Segmentation**](https://github.com/ByungKwanLee/Causal-Unsupervised-Segmentation) with an extended preprocessing pipeline, Hydra‑based configuration, and one‑command training.
 
-## Download 
+## ✨ What's new in this fork?
 
-## Install
+- **Adaptive standardization** – per‑image mean/std computed automatically.
+- **Patchifying & stitching** – work with gigapixel images without memory errors.
+- **Single YAML configuration** – set everything in `config/config.yaml`; no shell edits.
+- **Hydra + TensorBoard logging** – experiment tracking out of the box.
+- **Simplified CLI** – `python train.py` for the full pipeline.
+- **Optional supervision** – evaluate your own labels alongside unsupervised outputs.
 
-### Clone this repository:
-```shell script
+## Installation
+
+### 1. Clone
+
+```bash
 git clone https://github.com/Ruslan1541/CAUSE_tomo.git
 cd CAUSE_tomo
 ```
-### Install Conda Environment
-Please visit the [Anaconda install page](https://docs.anaconda.com/anaconda/install/index.html) if you do not already have conda installed
 
-```shell script
-conda env create --name
-conda activate --name
-```
-### Install packages
-```shell script
-pip install -e
+### 2. Create a Conda environment
+
+```bash
+conda create -n cause_tomo python=3.10
+conda activate cause_tomo
 ```
 
-##  Directories layout (exctracted from original git with some slithly improvements and adaptations (i wanna highlight these features))
-    .
-    ├── config
-    │   ├── config.yaml                # Hydra Config to identify hyperparameters, data, model and other options without the editing code
-    │
-    ├── loader
-    │   ├── processor.py                # Preprocessing class to load images, patchify them and calculate std/mean for standartization
-    │   ├── netloader.py                # Self-Supervised Pretrained Model Loader & Segmentation Head Loader
-    │   └── dataloader.py               # Dataloader Thanks to STEGO [ICLR 2022]
-    │
-    ├── models                          # Model Design of Self-Supervised Pretrained: [DINO/DINOv2/iBOT/MAE/MSN]
-    │   ├── dinomaevit.py               # ViT Structure of DINO and MAE
-    │   ├── dinov2vit.py                # ViT Structure of DINOv2
-    │   ├── ibotvit.py                  # ViT Structure of iBOT
-    │   └── msnvit.py                   # ViT Structure of MSN
-    │
-    ├── modules                         # Segmentation Head and Its Necessary Function
-    │   └── segment_module.py           # Including Tools with Generating Concept Book and Contrastive Learning
-    │   └── segment.py                  # [MLP & TR] Including Tools with Generating Concept Book and Contrastive Learning
-    │
-    ├── outputs
-    │   └── ..\.hydra                   # directory with congisg and other files for specific run
-    │   └── ..\train.log                # log of run
-    │
-    ├── utils
-    │   └── utils.py                    # Utility for auxiliary tools
-    │
-    ├── train_mediator.py               # (STEP 1)  Generating Concept Cluster Book as a Mediator
-    ├── train_front_door.py             # (STEP 2)  Frontdoor Adjustment through Unsupervised Semantic Segmentation
-    ├── fine_tuning.py                  # (STEP 3)  Fine-Tuning Cluster Probe
-    ├── inference.py                    # Evaluating Unsupervised Semantic Segmantation Performance (Post-Processing)
-    │
-    ├── train.py                        # Perform full training pipeline
-    │
-    ├── requirements.txt
-    └── README.md
+### 3. Install the package
 
----
-## 📊 How to Run CAUSE_tomo?
-
-To train CAUSE_tomo from scratch, please first edit [`CAUSE_tomo/config/config.yaml`](/config/config.yaml) and set there all the required parameters
-
-Then you can run the following:
-
-```shell script
-python train.py
+```bash
+pip install -r requirements.txt
 ```
-At the end of each run, in [`outputs`](/outputs/) will be created a new log
+## Directory overview
 
-To monitor training with tensorboard run the following from `CAUSE_tomo` directory:
-
-```shell script
-tensorboard --logdir logs
+```
+CAUSE_tomo
+├── config/                  # <‑‑ all hyper‑parameters live here
+│   └── config.yaml
+├── loader/                 # data loading & preprocessing
+├── models/                 # ViT backbones (DINO, DINOv2, MAE, iBOT, MSN)
+├── modules/                # segmentation heads & utilities
+├── outputs/                # created automatically – logs, checkpoints, hydra configs
+├── train.py                # full pipeline
+├── train_mediator.py       # generate clustrbook
+├── train_front_door.py     # frontdoor adjustment through constrastive learning
+├── fine_tuning.py          # repeat clustering on refined concepts
+├── inference.py            # inference on images
+└── ...
 ```
 
-### Bringing your own data
+## Quick start
 
-To train CAUSE_tomo on your own dataset please specify in [`CAUSE_tomo/config/config.yaml`](/config/config.yaml) set the following parameters:
+1. **Download pre‑trained backbones from** [**Causal‑Unsupervised‑Segmentation**](https://github.com/ByungKwanLee/Causal-Unsupervised-Segmentation)\
+   Place the checkpoint files under `ckpt/` (path configurable in `config.yaml`).
 
-```yaml
-data_dir: "directory"
-dataset: "dataset_name"
+2. **Edit config.yaml**
+
+   ```yaml
+   data_dir: "/path/to/data_root"
+   dataset:  "my_dataset"
+   ...
+   ```
+
+3. **Train and inference**
+
+    ```bash
+    python train.py
+    ```
+4. **Monitor**
+
+    ```bash
+    tensorboard --logdir logs
+    ```
+
+## Bringing your own data
+
+Your dataset folder must initially contain only high‑resolution TIFF images:
+
 ```
+data_root/my_dataset
+├── img_0001.tif
+├── img_0002.tif
+└── ...
+```
+
+After preprocessing, the script adds:
+
+```
+data_root/my_dataset
+├── img_0001.tif
+├── img_0002.tif
+├── ...
+├── patches/        # extracted patches
+├── std_mean/       # mean.pt & std.pt
+└── results/        # segmentation maps
+```
+## Acknowledgements
+
+- Original code: [Causal‑Unsupervised‑Segmentation](https://github.com/ByungKwanLee/Causal-Unsupervised-Segmentation)
+
