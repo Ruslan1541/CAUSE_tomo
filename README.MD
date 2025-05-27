@@ -1,13 +1,21 @@
-# SSG
+# CAUSE\_tomo — Causal Unsupervised Segmentation for tomographic images
 
-## Results
+This code is the further development of [**Causal‑Unsupervised‑Segmentation**](https://github.com/ByungKwanLee/Causal-Unsupervised-Segmentation) with an extended preprocessing pipeline, Hydra‑based configuration, and one‑command training.
 
-## Download 
+## ✨ What's new in this fork?
 
-## Install
+- **Adaptive standardization** – per‑image mean/std computed automatically.
+- **Patchifying & stitching** – work with gigapixel images without memory errors.
+- **Single YAML configuration** – set everything in `config/config.yaml`; no shell edits.
+- **Hydra + TensorBoard logging** – experiment tracking out of the box.
+- **Simplified CLI** – `python train.py` for the full pipeline.
+- **Optional supervision** – evaluate your own labels alongside unsupervised outputs.
 
-### Clone this repository:
-```shell script
+## Installation
+
+### 1. Clone
+
+```bash
 git clone https://github.com/Ruslan1541/CAUSE_tomo.git
 cd CAUSE_tomo
 ```
@@ -68,9 +76,26 @@ CAUSE_tomo
 
 ## Bringing your own data
 
-To train CAUSE_tomo on your own dataset please specify in [`CAUSE_tomo/config/config.yaml`](/config/config.yaml) set the following parameters:
+Your dataset folder must initially contain only high‑resolution TIFF images:
 
-```yaml
-data_dir: "directory"
-dataset: "dataset_name"
 ```
+data_root/my_dataset
+├── img_0001.tif
+├── img_0002.tif
+└── ...
+```
+
+After preprocessing, the script adds:
+
+```
+data_root/my_dataset
+├── img_0001.tif
+├── img_0002.tif
+├── ...
+├── patches/        # extracted patches
+├── std_mean/       # mean.pt & std.pt
+└── results/        # segmentation maps
+```
+## Acknowledgements
+
+- Original code: [Causal‑Unsupervised‑Segmentation](https://github.com/ByungKwanLee/Causal-Unsupervised-Segmentation)
