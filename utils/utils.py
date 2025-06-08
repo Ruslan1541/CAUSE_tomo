@@ -145,26 +145,33 @@ def num_param(f):
         out += param.numel()
     return out
 
-def merge_patches(patches, patch_size, step):
+def merge_patches(args, patches, patch_size, step):
     N, M = patches.shape[0], patches.shape[1]
     
     out_h = (N - 1) * step + patch_size
     out_w = (M - 1) * step + patch_size
     
     classes = np.unique(patches)
-    hist = np.zeros((out_h, out_w, classes.shape[0]), dtype=np.uint8)
+    if classes.shape[0] != args.n_classes:
+        full_mask = np.zeros((out_h, out_w), dtype=np.uint8)
+        for i in range(N):
+            for j in range(M):
+                y0, x0 = i * step, j * step
+                full_mask[y0:y0+patch_size, x0:x0+patch_size] = patches[i, j]
+        return full_mask
+    else:  
+        full_mask = np.zeros((out_h, out_w, classes.shape[0]), dtype=np.uint8)
+        for i in range(N):
+            for j in range(M):
+                patch = patches[i, j]
+                y0 = i * step
+                x0 = j * step
+                for c in range(classes.shape[0]):
+                    full_mask[y0 : y0 + patch_size, x0 : x0 + patch_size, c] += (patch == classes[c])
+                    
+        merged = full_mask.argmax(axis=2) 
 
-    for i in range(N):
-        for j in range(M):
-            patch = patches[i, j]
-            y0 = i * step
-            x0 = j * step
-            for c in range(classes.shape[0]):
-                hist[y0 : y0 + patch_size, x0 : x0 + patch_size, c] += (patch == classes[c])
-
-    merged = hist.argmax(axis=2) 
-
-    return (merged*(255//(classes.shape[0]-1))).astype(np.uint8)
+        return (merged*(255//(classes.shape[0]-1))).astype(np.uint8)
 
 
 def handle_writer_logs(args, 

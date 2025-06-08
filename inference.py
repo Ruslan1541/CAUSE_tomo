@@ -79,7 +79,8 @@ def test(args, net, segment, cluster, train_loader, cmap, nice, writer, rank):
                                       args.train_resolution, 
                                       args.train_resolution))
                 step = int(args.train_resolution * (1 - args.overlap_fraction))
-                reconstructed[file_type] = merge_patches(reshaped, 
+                reconstructed[file_type] = merge_patches(args,
+                                                         reshaped, 
                                                          patch_size=args.train_resolution, 
                                                          step=step)
             

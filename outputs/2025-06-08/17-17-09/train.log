@@ -1,0 +1,51 @@
+[2025-06-08 17:17:09,135][loader.processor][INFO] - Processing 50 images...
+[2025-06-08 17:17:52,288][loader.processor][INFO] - Std_mean estimation for 50 images...
+[2025-06-08 17:17:58,092][__main__][INFO] - Starting training pipeline...
+[2025-06-08 17:17:58,093][__main__][INFO] - 
+Configuration:
+[2025-06-08 17:17:58,094][__main__][INFO] - data_dir: D:\Data\CAUSE_data\limestone
+dataset: limestone_patches
+n_classes: 2
+is_not_ready: true
+standardization: true
+std_mean_path: D:\Data\CAUSE_data\limestone\limestone_std_mean
+ckpt: C:/tomograph4/Scripts/analytics_2/checkpoints/dinov2_vit_base_14.pth
+num_codebook: 2048
+reduced_dim: 90
+projection_dim: 2048
+run_name: train_dinov2
+dim: 768
+num_queries: 529
+device: cuda
+distributed: false
+load_segment: false
+load_cluster: false
+mediator_epoch: 1
+front_epoch: 2
+fine_tune_epoch: 5
+batch_size: 16
+learning_rate: 0.001
+num_workers: 2
+thresh_pos: 0.3
+thresh_neg: 0.1
+temp: 0.1
+grid: true
+degree_of_sampling: 2
+patch_size: 320
+train_resolution: 322
+patches_shape:
+- 9
+- 9
+overlap_fraction: 0.2
+max_images: 50
+gpu: '0'
+port: '12355'
+
+[2025-06-08 17:17:58,096][__main__][INFO] - -------------Train Mediator-------------
+[2025-06-08 17:17:58,678][__main__][ERROR] - Error in Train Mediator: [Errno 2] No such file or directory: 'C:/tomograph4/Scripts/analytics_2/checkpoints/dinov2_vit_base_14.pth'
+[2025-06-08 17:17:58,687][__main__][INFO] - -------------Train Front-------------
+[2025-06-08 17:17:59,215][__main__][ERROR] - Error in Train Front: [Errno 2] No such file or directory: 'C:/tomograph4/Scripts/analytics_2/checkpoints/dinov2_vit_base_14.pth'
+[2025-06-08 17:17:59,224][__main__][INFO] - -------------Fine Tune-------------
+[2025-06-08 17:17:59,756][__main__][ERROR] - Error in Fine Tune: [Errno 2] No such file or directory: 'C:/tomograph4/Scripts/analytics_2/checkpoints/dinov2_vit_base_14.pth'
+[2025-06-08 17:17:59,764][__main__][INFO] - -------------Inference-------------
+[2025-06-08 17:18:00,298][__main__][ERROR] - Error in Inference: [Errno 2] No such file or directory: 'C:/tomograph4/Scripts/analytics_2/checkpoints/dinov2_vit_base_14.pth'

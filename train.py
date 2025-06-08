@@ -129,7 +129,7 @@ class TrainingPipeline:
         self.cfg.num_queries = (self.cfg.train_resolution ** 2 // 
                                     patch_size ** 2)
         
-@hydra.main(version_base=None, config_path='config', config_name='config')
+@hydra.main(version_base=None, config_path='config', config_name='limestone_config')
 def main(cfg: DictConfig) -> None:
     """
     Main entry point for the training pipeline.
@@ -157,4 +157,5 @@ def main(cfg: DictConfig) -> None:
         raise
 
 if __name__ == "__main__":
+    #parse the name of config 
     main()
