@@ -74,13 +74,13 @@ class Wrapper(object):
 
 def pickle_path_and_exist(args):
     
-    baseline = args.ckpt.split('/')[-1].split('.')[0]
+    baseline = args.model.ckpt.split('/')[-1].split('.')[0]
 
-    modular_dir = os.path.join("CAUSE", args.dataset, "modularity", baseline, args.run_name)
+    modular_dir = os.path.join("CAUSE", args.dataset.dst, "modularity", baseline, args.model.run_name)
     check_dir(modular_dir) 
     modular_path = os.path.join(modular_dir, "modular.npy")
     
-    weights_dir = os.path.join("CAUSE", args.dataset, baseline, args.run_name)
+    weights_dir = os.path.join("CAUSE", args.dataset.dst, baseline, args.model.run_name)
     check_dir(weights_dir)
     segment_path = os.path.join(weights_dir, "segment_tr.pth")
     cluster_path = os.path.join(weights_dir, "cluster_tr.pth")
@@ -109,12 +109,12 @@ def check_dir(dir_path):
         os.makedirs(dir_path, exist_ok=True)
         
 def path(args, add=None):
-    baseline = args.ckpt.split('/')[-1].split('.')[0]
+    baseline = args.model.ckpt.split('/')[-1].split('.')[0]
     y = f'{args.num_codebook}'
-    new_path = f'{args.data_dir}/results/{args.n_classes}_classes'
+    new_path = f'{args.dataset.data_dir}/results/{args.dataset.n_classes}_classes'
     check_dir(new_path)
     
-    root = os.path.join(new_path, args.dataset, baseline, y, args.run_name, add)
+    root = os.path.join(new_path, args.dataset.dst, baseline, y, args.model.run_name, add)
 
     check_dir(f'{root}/imgs')
     check_dir(f'{root}/kmeans')
@@ -152,7 +152,7 @@ def merge_patches(args, patches, patch_size, step):
     out_w = (M - 1) * step + patch_size
     
     classes = np.unique(patches)
-    if classes.shape[0] != args.n_classes:
+    if classes.shape[0] != args.dataset.n_classes:
         full_mask = np.zeros((out_h, out_w), dtype=np.uint8)
         for i in range(N):
             for j in range(M):
@@ -188,14 +188,14 @@ def handle_writer_logs(args,
         rank (int): Process rank in distributed training setup
     """
     if args.distributed and rank == 0:
-        check = args.ckpt.split('/')[-1].split('.')[0]
+        check = args.model.ckpt.split('/')[-1].split('.')[0]
     elif not args.distributed:
-        check = int(args.ckpt.split('/')[-1].split('.')[0].split('_')[-1])
+        check = int(args.model.ckpt.split('/')[-1].split('.')[0].split('_')[-1])
         
     print('smt1efe')
     writer.add_hparams({
         'check': check,
-        'classes': args.n_classes,
+        'classes': args.dataset.n_classes,
         'resoltuions': args.train_resolution
     }, {"train_mIoU": mIoU})
     

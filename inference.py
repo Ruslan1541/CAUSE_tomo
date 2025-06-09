@@ -103,7 +103,7 @@ def inference(rank, args, _):
     cluster = cluster_tr_loader(args, rank)
     
     # evaluation
-    nice = NiceTool(args.n_classes)
+    nice = NiceTool(args.dataset.n_classes)
 
     # color map
     cmap = create_colormap()

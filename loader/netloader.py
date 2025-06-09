@@ -5,7 +5,7 @@ from torch.nn.parallel import DistributedDataParallel
 
 def network_loader(args, rank=0):
     # load network
-    net = load_model(args.ckpt, rank).to(args.device)
+    net = load_model(args.model.ckpt, rank).to(args.device)
     if args.distributed:
         net = DistributedDataParallel(net, device_ids=[rank])
     freeze(net)

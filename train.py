@@ -113,23 +113,23 @@ class TrainingPipeline:
         """
         self.cfg.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         
-        if 'dinov2' in self.cfg.ckpt:
+        if 'dinov2' in self.cfg.model.ckpt:
             self.cfg.train_resolution = 322
             
-        if 'small' in self.cfg.ckpt:
+        if 'small' in self.cfg.model.ckpt:
             self.cfg.dim = 384
-        elif 'base' in self.cfg.ckpt:
+        elif 'base' in self.cfg.model.ckpt:
             self.cfg.dim = 768
         
         #set patches_shape for inference stage
         self.cfg.patches_shape = patches_shape
         
         # Calculate number of queries based on patch size
-        patch_size = int(self.cfg.ckpt.split('_')[-1].split('.')[0])
+        patch_size = int(self.cfg.model.ckpt.split('_')[-1].split('.')[0])
         self.cfg.num_queries = (self.cfg.train_resolution ** 2 // 
                                     patch_size ** 2)
         
-@hydra.main(version_base=None, config_path='config', config_name='limestone_config')
+@hydra.main(version_base=None, config_path='config', config_name='config')
 def main(cfg: DictConfig) -> None:
     """
     Main entry point for the training pipeline.

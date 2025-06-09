@@ -89,8 +89,8 @@ class Cluster(nn.Module):
         reset(self.codebook, args.num_codebook)
         
         # cluster centroid
-        self.cluster_probe = torch.nn.Parameter(torch.randn(args.n_classes, self.reduced_dim))
-        reset(self.cluster_probe, args.n_classes)
+        self.cluster_probe = torch.nn.Parameter(torch.randn(args.dataset.n_classes, self.reduced_dim))
+        reset(self.cluster_probe, args.dataset.n_classes)
 
     def bank_init(self):
         self.prime_bank = {}

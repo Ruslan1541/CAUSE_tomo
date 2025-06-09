@@ -1,2 +1,0 @@
-[2025-05-27 15:49:55,511][__main__][ERROR] - Dataset processing failed: [WinError 3] Системе не удается найти указанный путь: 'D:\\Data\\limestone\\limestone_std_mean'
-[2025-05-27 15:49:55,511][__main__][ERROR] - Pipeline execution failed: [WinError 3] Системе не удается найти указанный путь: 'D:\\Data\\limestone\\limestone_std_mean'

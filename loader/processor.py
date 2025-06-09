@@ -1,3 +1,4 @@
+import os
 import cv2
 import torch
 import logging
@@ -30,17 +31,20 @@ class ImageDataProcessor:
         self.config = config
         self.padding_size = None
         
-        self.output_dir = Path(self.config.data_dir) / self.config.dataset
-        self.stats_dir = self.output_dir / f'{self.config.dataset}_std_mean'
-        self.patches_dir = self.output_dir / f'{self.config.dataset}_patches'
+        self.output_dir = Path(self.config.dataset.data_dir) / self.config.dataset.dst
+        self.stats_dir = self.output_dir / f'{self.config.dataset.dst}_std_mean'
+        self.patches_dir = self.output_dir / f'{self.config.dataset.dst}_patches'
         
+        if os.path.exists(self.patches_dir):
+            logger.info(f"{self.config.dataset.dst} dataset with extracted patches already exists, please check its content")
+            
         self.stats_dir.mkdir(exist_ok=True)
         self.patches_dir.mkdir(exist_ok=True)
         
         #update config file
         self.config.std_mean_path = str(self.stats_dir)
-        self.config.data_dir = str(self.output_dir)
-        self.config.dataset = f'{self.config.dataset}_patches'
+        self.config.dataset.data_dir = str(self.output_dir)
+        self.config.dataset.dst = f'{self.config.dataset.dst}_patches'
         
     def process_dataset(self) -> Tuple[int, int]:
         """
@@ -54,7 +58,7 @@ class ImageDataProcessor:
             if not img_files:
                 raise FileNotFoundError(f"No image files found in {self.output_dir}")
 
-            if self.config.is_not_ready:
+            if self.config.dataset.is_not_ready:
                 self._process_all_images(img_files)
                 
             return self._get_patch_dimensions(img_files[0])
@@ -71,7 +75,7 @@ class ImageDataProcessor:
         Args:
             img_files: List of image file paths
         """
-        images = [] if self.config.standardization else None
+        images = [] if self.config.dataset.standardization else None
         idx = 0
         
         logger.info(f"Processing {len(img_files)} images...")
@@ -80,7 +84,7 @@ class ImageDataProcessor:
             try:
                 patches, input_image = self._process_single_image(img_path)
                 
-                if self.config.standardization:
+                if self.config.dataset.standardization:
                     images.append(input_image)
                     
                 #Save extracted patches to files.
@@ -94,7 +98,7 @@ class ImageDataProcessor:
                 logger.error(f"Error processing {img_path}: {str(e)}")
                 continue
                 
-        if self.config.standardization and images:
+        if self.config.dataset.standardization and images:
             self._calculate_and_save_statistics(images)
 
     def _process_single_image(self, 

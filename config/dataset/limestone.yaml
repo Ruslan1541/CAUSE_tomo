@@ -1,0 +1,6 @@
+#data:
+data_dir: "D:/Data/CAUSE_data"
+dst: 'limestone'
+n_classes: 2
+is_not_ready: false
+standardization: false

@@ -65,16 +65,16 @@ def create_dataset(args: Any,
         if label:
             target_transform = create_transform(target=True)
             return CroppedLabelDataset(
-                img_dir=args.data_dir,
-                dataset_name=args.dataset,
+                img_dir=args.dataset.data_dir,
+                dataset_name=args.dataset.dst,
                 transform=transform,
                 target_transform=target_transform,
                 normalize=normalize
             )
             
         return CroppedDataset(
-            img_dir=args.data_dir,
-            dataset_name=args.dataset,
+            img_dir=args.dataset.data_dir,
+            dataset_name=args.dataset.dst,
             transform=transform,
             normalize=normalize
         )
