@@ -192,7 +192,6 @@ def handle_writer_logs(args,
     elif not args.distributed:
         check = int(args.model.ckpt.split('/')[-1].split('.')[0].split('_')[-1])
         
-    print('smt1efe')
     writer.add_hparams({
         'check': check,
         'classes': args.dataset.n_classes,
