@@ -1,0 +1,3 @@
+#model:
+ckpt: "C:/t4_old_very/tomograph4/Scripts/analytics_2/checkpoints/dino_vit_base_8.pth"
+run_name: 'train_dino'

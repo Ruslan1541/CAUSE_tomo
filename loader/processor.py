@@ -58,7 +58,7 @@ class ImageDataProcessor:
             if not img_files:
                 raise FileNotFoundError(f"No image files found in {self.output_dir}")
 
-            if self.config.dataset.is_not_ready:
+            if self.config.dataset.patchify:
                 self._process_all_images(img_files)
                 
             return self._get_patch_dimensions(img_files[0])
