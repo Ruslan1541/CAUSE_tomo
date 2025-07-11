@@ -1,0 +1,6 @@
+#data:
+data_dir: "D:/Data/CAUSE_data"
+dst: 'core_sample_multi'
+n_classes: 4
+patchify: false
+standardization: false

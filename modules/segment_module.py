@@ -3,6 +3,7 @@ import torch
 from torch import cat
 import torch.nn as nn
 import torch.nn.functional as F
+from utils.utils import set_seeds
 from torch import randperm as perm
 
 class ProjectionSegment(nn.Module):
@@ -257,7 +258,7 @@ def stochastic_sampling(x, order=None, k=4):
     """
     pooling
     """
-    torch.manual_seed(42)
+    # set_seeds()
     x = transform(x)
     x_patch = x.unfold(2, k, k).unfold(3, k, k)
     x_patch = x_patch.permute(0, 2, 3, 4, 5, 1)

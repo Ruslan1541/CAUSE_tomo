@@ -12,6 +12,8 @@ from modules.segment_module import compute_modularity_based_codebook
 cudnn.benchmark = False
 scaler = GradScaler()
 
+set_seeds()
+
 @Wrapper.EpochPrint
 def train(args, net, cluster, train_loader, optimizer):
     cluster.train()
@@ -38,6 +40,8 @@ def train(args, net, cluster, train_loader, optimizer):
         # real-time print
         desc = f'[Train] Modulatiry_loss: {loss_mod / (idx + 1):.6f}'
         prog_bar.set_description(desc, refresh=True)
+        
+        
             
         # Interrupt for sync GPU Process
         if args.distributed: dist.barrier()

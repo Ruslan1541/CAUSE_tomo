@@ -1,7 +1,7 @@
 #default params:
 defaults: 
 - _self_
-- dataset: limestone
+- dataset: core_sample_multi
 - model: dinov2
 
 #model_params:
@@ -35,6 +35,7 @@ patches_shape: null
 std_mean_path: null
 overlap_fraction: 0.2
 max_images: 50
+crf_max_iter: 100
 
 #hardware:
 gpu: '0'

@@ -10,6 +10,8 @@ from loader.dataloader import dataloader
 from modules.segment_module import transform, untransform
 from loader.netloader import network_loader, segment_tr_loader, cluster_tr_loader
 
+set_seeds()
+
 def test(args, net, segment, cluster, train_loader, cmap, nice, writer, rank):
     segment.eval()
     
@@ -52,7 +54,7 @@ def test(args, net, segment, cluster, train_loader, cmap, nice, writer, rank):
         cluster_preds = cluster.forward_centroid(untransform(interp_seg_feat), crf=True)
             
         # crf
-        crf_preds = do_crf(args, img, cluster_preds).argmax(1)
+        crf_preds = do_crf(args, img, cluster_preds, max_iter=args.crf_max_iter).argmax(1)
         
         temp_root = save_all(args, img, ind, cluster_preds.argmax(dim=1), crf_preds, cmap, add='temp')
         
@@ -86,6 +88,7 @@ def test(args, net, segment, cluster, train_loader, cmap, nice, writer, rank):
             
             save_reconstructed_images(args, reconstructed, count, writer, rank)
             count += 1
+            break
         
     # shutil.rmtree(temp_root)
 

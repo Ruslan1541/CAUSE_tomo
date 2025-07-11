@@ -58,6 +58,8 @@ class TrainingPipeline:
         Args:
             rank: GPU rank for distributed training
         """
+        self.cfg.load_segment = False
+        self.cfg.load_cluster = False
         # Mediator training
         self.run_training_stage("Train Mediator", mediator_train, rank)
         
@@ -149,7 +151,26 @@ def main(cfg: DictConfig) -> None:
             mp.spawn(pipeline.run, nprocs=pipeline.ngpus_per_node, join=True)
         else:
             # Single GPU training
-            pipeline.run(rank=pipeline.gpu_list[0])
+            # param_grid = {
+            #     'batch_size': [8, 16, 32],
+            #     'num_codebook': [512, 1024, 2048, 4096],
+            #     'temp': [0.1, 0.2, 0.3],
+            #     'thresh_neg': [0.1, 0.2, 0.3]
+            # }
+            for bs in [8]:
+                for num_codebook in [1024]:
+                    for temp in [0.1]:
+                        for thresh_neg in [0.1]:
+                            
+                            print(f'codebook_{num_codebook}-batch_size_{bs}---temp---{temp}---thresh_neg_{thresh_neg}')
+                        
+                            cfg.num_codebook = num_codebook
+                            cfg.temp = temp
+                            cfg.thresh_neg = thresh_neg
+                            cfg.batch_size = bs
+                            
+                            cfg.model.run_name = f"codebook_{num_codebook}_batch_size_{bs}_temp_{temp}_thresh_neg_{thresh_neg}"
+                            pipeline.run(rank=pipeline.gpu_list[0])
             
     except Exception as e:
         logger.error(f"Pipeline execution failed: {str(e)}")
