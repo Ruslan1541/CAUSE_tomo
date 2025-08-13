@@ -10,3 +10,4 @@ notebooks
 .venv
 outputs
 models_inference.ipynb
+checkpoints_med/dinomed_vit_base_16.pth

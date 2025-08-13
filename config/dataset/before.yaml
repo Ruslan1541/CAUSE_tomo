@@ -1,6 +1,6 @@
 #data:
 data_dir: "D:/Data/CAUSE_data"
-dst: 'core_sample_multi'
-n_classes: 4
+dst: 'before_exp'
+n_classes: 3
 patchify: True
 standardization: True

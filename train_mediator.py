@@ -12,7 +12,7 @@ from modules.segment_module import compute_modularity_based_codebook
 cudnn.benchmark = False
 scaler = GradScaler()
 
-set_seeds()
+# set_seeds()
 
 @Wrapper.EpochPrint
 def train(args, net, cluster, train_loader, optimizer):
@@ -69,38 +69,66 @@ def mediator_train(rank, args, ngpus_per_node):
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=0.2)
 
     paths = pickle_path_and_exist(args)
-
-    # early save for time
-    if not paths['modular_exists']:
-        rprint("No File Exists!!", rank)
-        for epoch in range(args.mediator_epoch):
-            
-            # for shuffle
-            if args.distributed: sampler.set_epoch(epoch)
-            
-            train(
-                epoch,
-                rank,
-                args,
-                net,
-                cluster,
-                train_loader,
-                optimizer,
-                )
+    
+    if args.check_mediator:
+        # early save for time
+        if not paths['modular_exists']:
+            rprint("No File Exists!!", rank)
+            for epoch in range(args.mediator_epoch):
                 
-            # scheduler step
-            scheduler.step()
-
-            # save
-            if rank == 0:
-                np.save(paths['modular_path'], cluster.codebook.detach().cpu().numpy()
-                if args.distributed else cluster.codebook.detach().cpu().numpy())
+                # for shuffle
+                if args.distributed: sampler.set_epoch(epoch)
                 
-            # Interrupt for sync GPU Process
-            if args.distributed: dist.barrier()
+                train(
+                    epoch,
+                    rank,
+                    args,
+                    net,
+                    cluster,
+                    train_loader,
+                    optimizer,
+                    )
+                    
+                # scheduler step
+                scheduler.step()
 
+                # save
+                if rank == 0:
+                    np.save(paths['modular_path'], cluster.codebook.detach().cpu().numpy()
+                    if args.distributed else cluster.codebook.detach().cpu().numpy())
+                    
+                # Interrupt for sync GPU Process
+                if args.distributed: dist.barrier()
+
+        else:
+            rprint("Already Exists!!", rank)
     else:
-        rprint("Already Exists!!", rank)
+        for epoch in range(args.mediator_epoch):
+                
+                # for shuffle
+                if args.distributed: sampler.set_epoch(epoch)
+                
+                train(
+                    epoch,
+                    rank,
+                    args,
+                    net,
+                    cluster,
+                    train_loader,
+                    optimizer,
+                    )
+                # scheduler step
+                scheduler.step()
+
+                # save
+                if rank == 0:
+                    np.save(paths['modular_path'], cluster.codebook.detach().cpu().numpy()
+                    if args.distributed else cluster.codebook.detach().cpu().numpy())
+                    
+                # Interrupt for sync GPU Process
+                if args.distributed: dist.barrier()
+                
+                rprint("Modularity was saved!!", rank)
     
         # clean ddp process
     if args.distributed: ddp_clean()

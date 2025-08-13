@@ -1,0 +1,3 @@
+#model:
+ckpt: "D:/git/analytics_2/checkpoints_med/dinomed_vit_base_16.pth"
+run_name: 'train_dino'

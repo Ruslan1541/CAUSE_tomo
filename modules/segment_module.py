@@ -60,6 +60,8 @@ class Decoder(nn.Module):
     def __init__(self, args, codebook=None):
         super().__init__()
         self.codebook = codebook
+        
+        set_seeds()
 
         # TR decoder
         self.query_pos = nn.Parameter(torch.randn(args.num_queries, args.dim))
@@ -81,6 +83,8 @@ class Cluster(nn.Module):
         self.projection_dim = args.projection_dim 
         self.thresh_pos = args.thresh_pos
         self.thresh_neg = args.thresh_neg
+        
+        set_seeds()
 
         # num codebook
         self.num_codebook = args.num_codebook
@@ -100,12 +104,14 @@ class Cluster(nn.Module):
             self.prime_bank[i] = start_of_tensor
 
     def bank_update(self, feat, proj_feat_ema, max_num=100):
+        
+        set_seeds()
+        
         # load all and bank collection
         quant_ind = quantize_index(feat, self.codebook)
         for i in quant_ind.unique():
             # key bank
             key = proj_feat_ema[torch.where(quant_ind == i)]
-
             # 50% random cutting
             key = key[perm(len(key))][:int(len(key)*0.5)]
 
@@ -258,13 +264,15 @@ def stochastic_sampling(x, order=None, k=4):
     """
     pooling
     """
-    # set_seeds()
     x = transform(x)
     x_patch = x.unfold(2, k, k).unfold(3, k, k)
     x_patch = x_patch.permute(0, 2, 3, 4, 5, 1)
     x_patch = x_patch.reshape(-1, x_patch.shape[3:5].numel(), x_patch.shape[5])
 
-    if order==None: order = torch.randint(k ** 2, size=(x_patch.shape[0],))
+    if order==None: 
+        # set_seeds()
+        order = torch.randint(k ** 2, size=(x_patch.shape[0],))
+        
 
     x_patch = x_patch[range(x_patch.shape[0]), order].reshape(x.shape[0], x.shape[2]//k, x.shape[3]//k, -1)
     x_patch = x_patch.permute(0, 3, 1, 2)

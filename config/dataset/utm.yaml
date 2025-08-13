@@ -1,6 +1,6 @@
 #data:
 data_dir: "D:/Data/CAUSE_data"
-dst: 'limestone'
+dst: 'utm120-5496-15'
 n_classes: 2
 patchify: false
 standardization: false

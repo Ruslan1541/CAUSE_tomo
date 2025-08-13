@@ -10,7 +10,7 @@ from loader.dataloader import dataloader
 from modules.segment_module import transform, untransform
 from loader.netloader import network_loader, segment_tr_loader, cluster_tr_loader
 
-set_seeds()
+# set_seeds()
 
 def test(args, net, segment, cluster, train_loader, cmap, nice, writer, rank):
     segment.eval()
@@ -114,7 +114,7 @@ def inference(rank, args, _):
     paths = pickle_path_and_exist(args)
     
     from datetime import datetime
-    log_dir = os.path.join('logs_train',
+    log_dir = os.path.join('logs',
                            datetime.today().strftime("%m-%d_%H-%M"),
                            os.path.dirname(paths['segment_path']),
                            'inference')

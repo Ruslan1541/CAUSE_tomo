@@ -157,8 +157,8 @@ def main(cfg: DictConfig) -> None:
             #     'temp': [0.1, 0.2, 0.3],
             #     'thresh_neg': [0.1, 0.2, 0.3]
             # }
-            for bs in [8]:
-                for num_codebook in [1024]:
+            for bs in [16]:
+                for num_codebook in [2048]:
                     for temp in [0.1]:
                         for thresh_neg in [0.1]:
                             
@@ -169,7 +169,7 @@ def main(cfg: DictConfig) -> None:
                             cfg.thresh_neg = thresh_neg
                             cfg.batch_size = bs
                             
-                            cfg.model.run_name = f"codebook_{num_codebook}_batch_size_{bs}_temp_{temp}_thresh_neg_{thresh_neg}"
+                            cfg.model.run_name = f"Radio_DINO"
                             pipeline.run(rank=pipeline.gpu_list[0])
             
     except Exception as e:

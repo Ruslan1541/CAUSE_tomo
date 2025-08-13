@@ -58,6 +58,8 @@ def load_model(ckpt, rank=0):
         import models.ibotvit as model
     elif name == "msn":
         import models.msnvit as model
+    elif name =='dinomed':
+        import models.vit as model
     else:
         raise ValueError
     
@@ -73,6 +75,10 @@ def load_model(ckpt, rank=0):
         msg = net.load_state_dict(checkpoint['state_dict'], strict=False)
     elif name == "msn":
         msg = checkpoint_module(checkpoint['target_encoder'], net)
+    elif name =='dinomed':
+        checkpoint.pop('head.weight')
+        checkpoint.pop('head.bias')
+        msg = net.load_state_dict(checkpoint)
 
     # check incompatible layer or variables
     rprint(msg, rank)

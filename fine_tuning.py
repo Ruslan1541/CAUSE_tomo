@@ -11,7 +11,7 @@ from loader.netloader import network_loader, segment_tr_loader, cluster_tr_loade
 cudnn.benchmark = False
 scaler = GradScaler()
 
-set_seeds()
+# set_seeds()
 
 @Wrapper.EpochPrint
 def train(args, net, segment, cluster, train_loader, optimizer_segment, optimizer_cluster):

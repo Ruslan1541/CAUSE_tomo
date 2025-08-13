@@ -164,7 +164,7 @@ class CroppedDataset(Dataset):
         Get transformed and normalized image.
         """
         image = self._load_image(self.img_dir / f"{index}.tif")
-        set_seeds()
+        # set_seeds()
         transformed_img = self.transform(image).unsqueeze(0)
         
         return {
@@ -217,9 +217,9 @@ class CroppedLabelDataset(CroppedDataset):
             cv2.IMREAD_GRAYSCALE
         ))
         
-        set_seeds()
+        # set_seeds()
         transformed_image = self.transform(image)
-        set_seeds()
+        # set_seeds()
         transformed_target = self.target_transform(target)
         
         return {

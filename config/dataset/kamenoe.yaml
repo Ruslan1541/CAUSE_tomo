@@ -1,0 +1,6 @@
+#data:
+data_dir: "D:/Data/CAUSE_data"
+dst: 'kamenoe'
+n_classes: 2
+patchify: true
+standardization: true

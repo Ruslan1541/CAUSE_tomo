@@ -1,8 +1,8 @@
 #default params:
 defaults: 
 - _self_
-- dataset: core_sample_multi
-- model: dinov2
+- dataset: kamenoe
+- model: dino_med
 
 #model_params:
 num_codebook: 2048
@@ -17,7 +17,8 @@ distributed: false
 load_segment: false
 load_cluster: false
 mediator_epoch: 1
-front_epoch: 2
+check_mediator: false
+front_epoch: 5
 fine_tune_epoch: 5
 batch_size: 16
 learning_rate: 1.0e-3
@@ -25,7 +26,7 @@ num_workers: 2
 thresh_pos: 0.3
 thresh_neg: 0.1
 temp: 0.1
-grid: true
+grid: false
 degree_of_sampling: 2
 
 #processing:
@@ -35,7 +36,7 @@ patches_shape: null
 std_mean_path: null
 overlap_fraction: 0.2
 max_images: 50
-crf_max_iter: 100
+crf_max_iter: 10
 
 #hardware:
 gpu: '0'
